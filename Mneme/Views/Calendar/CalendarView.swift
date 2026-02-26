@@ -120,7 +120,7 @@ struct CalendarView: View {
                                 .padding(.horizontal, 14)
                             }
 
-                            Spacer().frame(height: 160)
+                            Spacer().frame(height: 600)
                         }
                     }
                     .coordinateSpace(name: "calScroll")

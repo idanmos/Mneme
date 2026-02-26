@@ -53,7 +53,7 @@ struct MonthGridView: View {
             }
         }
         .contentShape(Rectangle())
-        .gesture(
+        .simultaneousGesture(
             DragGesture(minimumDistance: 40)
                 .onEnded { value in
                     guard abs(value.translation.width) > abs(value.translation.height) else { return }
