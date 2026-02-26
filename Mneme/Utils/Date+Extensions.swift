@@ -73,4 +73,20 @@ extension Date {
     func addingMonths(_ months: Int) -> Date {
         Calendar.current.date(byAdding: .month, value: months, to: self) ?? self
     }
+
+    /// Returns the 7 dates (Sun–Sat) of the week containing this date
+    var weekDays: [Date] {
+        let cal = Calendar.current
+        let weekday = cal.component(.weekday, from: self)   // 1 = Sunday
+        let sunday = cal.date(byAdding: .day, value: -(weekday - 1), to: self)!
+        return (0..<7).map { cal.date(byAdding: .day, value: $0, to: sunday)! }
+    }
+
+    /// "Today" if today, otherwise "EEE, d MMM" — used in compact calendar header
+    var compactHeaderLabel: String {
+        if Calendar.current.isDateInToday(self) { return "Today" }
+        let f = DateFormatter()
+        f.dateFormat = "EEE, d MMM"
+        return f.string(from: self)
+    }
 }

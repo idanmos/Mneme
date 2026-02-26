@@ -18,16 +18,28 @@ struct MainContainer: View {
             }
 
             // ── Floating FAB ──
-            HStack {
-                Spacer()
-                FloatingFAB { state.showAddNote = true }
-                    .padding(.trailing, 18)
-                    .padding(.bottom, 90)
+            if !state.showSearch {
+                HStack {
+                    Spacer()
+                    FloatingFAB { state.showAddNote = true }
+                        .padding(.trailing, 18)
+                        .padding(.bottom, 90)
+                }
             }
 
             // ── Tab bar ──
-            TabBarView().environmentObject(state)
+            if !state.showSearch {
+                TabBarView().environmentObject(state)
+            }
         }
+        .overlay {
+            if state.showSearch {
+                SearchView()
+                    .environmentObject(state)
+                    .transition(.move(edge: .bottom).combined(with: .opacity))
+            }
+        }
+        .animation(.easeOut(duration: 0.25), value: state.showSearch)
         .sheet(isPresented: $state.showAddNote) {
             AddNoteSheet()
                 .environmentObject(state)

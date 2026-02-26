@@ -35,10 +35,10 @@ struct MonthGridView: View {
             }
             .padding(.bottom, 4)
 
-            // ── Day cells ──
-            LazyVGrid(columns: columns, spacing: 0) {
-                ForEach(Array(gridDays.enumerated()), id: \.offset) { _, date in
-                    if let date {
+            if state.calendarCompact {
+                // ── Week strip (compact) ──
+                HStack(spacing: 0) {
+                    ForEach(state.calendarDate.weekDays, id: \.self) { date in
                         DayCellView(
                             date:       date,
                             isToday:    calendar.isDateInToday(date),
@@ -46,18 +46,52 @@ struct MonthGridView: View {
                             hasDot:     state.hasNotes(on: date)
                         )
                         .onTapGesture { state.calendarDate = date }
-                    } else {
-                        Color.clear.frame(height: 44)
+                    }
+                }
+            } else {
+                // ── Full month grid ──
+                LazyVGrid(columns: columns, spacing: 0) {
+                    ForEach(Array(gridDays.enumerated()), id: \.offset) { _, date in
+                        if let date {
+                            DayCellView(
+                                date:       date,
+                                isToday:    calendar.isDateInToday(date),
+                                isSelected: calendar.isDate(date, inSameDayAs: state.calendarDate),
+                                hasDot:     state.hasNotes(on: date)
+                            )
+                            .onTapGesture { state.calendarDate = date }
+                        } else {
+                            Color.clear.frame(height: 44)
+                        }
                     }
                 }
             }
         }
+        .contentShape(Rectangle())
         .gesture(
-            DragGesture(minimumDistance: 40)
+            DragGesture(minimumDistance: 30)
                 .onEnded { value in
-                    let direction = value.translation.width < 0 ? 1 : -1
-                    withAnimation(.easeInOut(duration: 0.25)) {
-                        state.displayedMonth = state.displayedMonth.addingMonths(direction)
+                    let isHorizontal = abs(value.translation.width) > abs(value.translation.height)
+                    if isHorizontal {
+                        let direction = value.translation.width < 0 ? 1 : -1
+                        withAnimation(.easeInOut(duration: 0.25)) {
+                            if state.calendarCompact {
+                                state.calendarDate = calendar.date(
+                                    byAdding: .weekOfYear, value: direction, to: state.calendarDate
+                                ) ?? state.calendarDate
+                            } else {
+                                state.displayedMonth = state.displayedMonth.addingMonths(direction)
+                            }
+                        }
+                    } else {
+                        // Vertical swipe: toggle compact mode
+                        withAnimation(.easeInOut(duration: 0.25)) {
+                            if value.translation.height < 0 {
+                                state.calendarCompact = true
+                            } else {
+                                state.calendarCompact = false
+                            }
+                        }
                     }
                 }
         )

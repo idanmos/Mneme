@@ -17,8 +17,18 @@ struct CalendarView: View {
 
                     Spacer()
 
-                    Text(state.displayedMonth.monthName)
-                        .font(.mnemeNavTitle)
+                    // Dual-line header: month name + day label when compact
+                    VStack(spacing: 1) {
+                        if state.calendarCompact {
+                            Text(state.displayedMonth.monthName)
+                                .font(.system(size: 13))
+                                .foregroundColor(.textSecondary)
+                        }
+                        Text(state.calendarCompact
+                             ? state.calendarDate.compactHeaderLabel
+                             : state.displayedMonth.monthName)
+                            .font(.mnemeNavTitle)
+                    }
 
                     Spacer()
 
@@ -49,21 +59,24 @@ struct CalendarView: View {
                 .padding(.top, 56)
                 .padding(.bottom, 6)
 
-                // ── Month grid ──
+                // ── Month grid / Week strip ──
                 MonthGridView()
                     .environmentObject(state)
                     .padding(.horizontal, 12)
                     .padding(.bottom, 4)
+                    .animation(.easeInOut(duration: 0.25), value: state.calendarCompact)
 
                 Divider()
 
                 // ── Task list for selected day ──
                 ScrollView(showsIndicators: false) {
                     VStack(alignment: .leading, spacing: 0) {
-                        Text(dayHeader)
-                            .font(.system(size: 13, weight: .bold))
-                            .padding(.horizontal, 18)
-                            .padding(.vertical, 12)
+                        if !state.calendarCompact {
+                            Text(dayHeader)
+                                .font(.system(size: 13, weight: .bold))
+                                .padding(.horizontal, 18)
+                                .padding(.vertical, 12)
+                        }
 
                         let items = state.notes(for: state.calendarDate)
 
@@ -88,6 +101,20 @@ struct CalendarView: View {
                     .padding(.top, 10)
                     .padding(.bottom, 160)
                 }
+                .simultaneousGesture(
+                    DragGesture(minimumDistance: 30)
+                        .onEnded { value in
+                            let isVertical = abs(value.translation.height) > abs(value.translation.width)
+                            guard isVertical else { return }
+                            withAnimation(.easeInOut(duration: 0.25)) {
+                                if value.translation.height < -40 && !state.calendarCompact {
+                                    state.calendarCompact = true
+                                } else if value.translation.height > 40 && state.calendarCompact {
+                                    state.calendarCompact = false
+                                }
+                            }
+                        }
+                )
             }
 
             // ── Overlaid dropdowns ──
