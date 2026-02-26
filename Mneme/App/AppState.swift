@@ -14,6 +14,7 @@ final class AppState: ObservableObject {
 
     // MARK: - Calendar UI
     @Published var calendarDate: Date = .now
+    @Published var displayedMonth: Date = .now
     @Published var calendarMode: String = "List"
     @Published var showMoreMenu: Bool = false
     @Published var showViewMenu: Bool = false

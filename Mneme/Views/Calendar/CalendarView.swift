@@ -17,7 +17,7 @@ struct CalendarView: View {
 
                     Spacer()
 
-                    Text(state.calendarDate.monthName)
+                    Text(state.displayedMonth.monthName)
                         .font(.mnemeNavTitle)
 
                     Spacer()

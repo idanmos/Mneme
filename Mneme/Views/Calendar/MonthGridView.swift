@@ -2,7 +2,6 @@ import SwiftUI
 
 struct MonthGridView: View {
     @EnvironmentObject var state: AppState
-    @State private var displayedMonth: Date = .now
 
     private let calendar = Calendar.current
     private let columns   = Array(repeating: GridItem(.flexible(), spacing: 0), count: 7)
@@ -10,9 +9,9 @@ struct MonthGridView: View {
 
     // Build the grid: nil for padding cells, Date for real days
     private var gridDays: [Date?] {
-        let first   = displayedMonth.firstDayOfMonth
-        let offset  = displayedMonth.firstWeekdayOfMonth
-        let count   = displayedMonth.daysInMonth
+        let first   = state.displayedMonth.firstDayOfMonth
+        let offset  = state.displayedMonth.firstWeekdayOfMonth
+        let count   = state.displayedMonth.daysInMonth
 
         var days = [Date?](repeating: nil, count: offset)
         for i in 0..<count {
@@ -58,7 +57,7 @@ struct MonthGridView: View {
                 .onEnded { value in
                     let direction = value.translation.width < 0 ? 1 : -1
                     withAnimation(.easeInOut(duration: 0.25)) {
-                        displayedMonth = displayedMonth.addingMonths(direction)
+                        state.displayedMonth = state.displayedMonth.addingMonths(direction)
                     }
                 }
         )
