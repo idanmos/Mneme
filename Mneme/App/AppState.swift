@@ -13,6 +13,9 @@ final class AppState: ObservableObject {
     @Published var completedExpanded: Bool = false
     @Published var showSearch: Bool = false
 
+    // MARK: - Settings Navigation
+    @Published var settingsPath: [SettingsRoute] = []
+
     // MARK: - Calendar UI
     @Published var calendarDate: Date = .now
     @Published var displayedMonth: Date = .now
@@ -51,9 +54,16 @@ final class AppState: ObservableObject {
         notes.insert(note, at: 0)
     }
 
-    func toggleCompletion(_ note: Note) {
+    func toggleCompletion(_ note: Note, preferences: UserPreferences? = nil) {
         guard let index = notes.firstIndex(of: note) else { return }
         notes[index].isCompleted.toggle()
+
+        if notes[index].isCompleted {
+            preferences?.hapticIfEnabled(.success)
+            if let pref = preferences {
+                SoundManager.shared.play(pref.completionSound)
+            }
+        }
     }
 
     func delete(_ note: Note) {

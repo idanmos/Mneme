@@ -77,36 +77,44 @@ struct SettingsItem {
 
 struct SettingsCard: View {
     let items: [SettingsItem]
+    var onTap: ((Int) -> Void)? = nil
 
     var body: some View {
         VStack(spacing: 0) {
             ForEach(Array(items.enumerated()), id: \.offset) { index, item in
-                HStack(spacing: 14) {
+                Button {
+                    onTap?(index)
+                } label: {
+                    HStack(spacing: 14) {
 
-                    // Icon box
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 6)
-                            .fill(item.iconBg)
-                            .frame(width: 28, height: 28)
-                        Image(systemName: item.icon)
-                            .font(.system(size: 14))
-                            .foregroundColor(.white)
+                        // Icon box
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 6)
+                                .fill(item.iconBg)
+                                .frame(width: 28, height: 28)
+                            Image(systemName: item.icon)
+                                .font(.system(size: 14))
+                                .foregroundColor(.white)
+                        }
+
+                        Text(item.label)
+                            .font(.mnemeBody)
+                            .foregroundColor(.textPrimary)
+
+                        Spacer()
+
+                        // Trailing area
+                        trailingView(for: item.trailingType)
+
+                        Image(systemName: "chevron.right")
+                            .font(.system(size: 13))
+                            .foregroundColor(.textSecondary)
                     }
-
-                    Text(item.label)
-                        .font(.mnemeBody)
-
-                    Spacer()
-
-                    // Trailing area
-                    trailingView(for: item.trailingType)
-
-                    Image(systemName: "chevron.right")
-                        .font(.system(size: 13))
-                        .foregroundColor(.textSecondary)
+                    .padding(.horizontal, Spacing.cardPadding)
+                    .padding(.vertical, 14)
+                    .contentShape(Rectangle())
                 }
-                .padding(.horizontal, Spacing.cardPadding)
-                .padding(.vertical, 14)
+                .buttonStyle(.plain)
 
                 if index < items.count - 1 {
                     Divider().padding(.leading, 58)
