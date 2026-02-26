@@ -2,6 +2,7 @@ import SwiftUI
 
 struct MainContainer: View {
     @EnvironmentObject var state: AppState
+    @EnvironmentObject var preferences: UserPreferences
 
     var body: some View {
         ZStack(alignment: .bottom) {
@@ -10,11 +11,7 @@ struct MainContainer: View {
             ZStack {
                 Color.appBackground.ignoresSafeArea()
 
-                switch state.selectedTab {
-                case 0:  NotesListView().environmentObject(state)
-                case 1:  CalendarView().environmentObject(state)
-                default: SettingsView().environmentObject(state)
-                }
+                contentForSelectedTab
             }
 
             // ── Floating FAB ──
@@ -29,7 +26,9 @@ struct MainContainer: View {
 
             // ── Tab bar ──
             if !state.showSearch {
-                TabBarView().environmentObject(state)
+                TabBarView()
+                    .environmentObject(state)
+                    .environmentObject(preferences)
             }
         }
         .overlay {
@@ -46,6 +45,49 @@ struct MainContainer: View {
                 .presentationDetents([.height(195)])
                 .presentationDragIndicator(.hidden)
                 .presentationCornerRadius(22)
+        }
+    }
+
+    // MARK: - Dynamic Tab Content
+
+    @ViewBuilder
+    private var contentForSelectedTab: some View {
+        let tabs = preferences.enabledTabs
+        let safeIndex = min(state.selectedTab, tabs.count - 1)
+        let tab = tabs.indices.contains(safeIndex) ? tabs[safeIndex] : .task
+
+        switch tab {
+        case .task:
+            NotesListView().environmentObject(state)
+        case .calendar:
+            CalendarView().environmentObject(state)
+        case .settings:
+            SettingsView()
+                .environmentObject(state)
+                .environmentObject(preferences)
+        case .eisenhowerMatrix:
+            placeholderView("Eisenhower Matrix".localized)
+        case .pomodoro:
+            placeholderView("Pomodoro".localized)
+        case .habitTracker:
+            placeholderView("Habit Tracker".localized)
+        case .countdown:
+            placeholderView("Countdown".localized)
+        case .search:
+            SearchView().environmentObject(state)
+        }
+    }
+
+    private func placeholderView(_ title: String) -> some View {
+        VStack(spacing: 12) {
+            Spacer()
+            Text(title)
+                .font(.mnemeTitle)
+                .foregroundColor(.textPrimary)
+            Text("Coming Soon".localized)
+                .font(.mnemeBody)
+                .foregroundColor(.textSecondary)
+            Spacer()
         }
     }
 }

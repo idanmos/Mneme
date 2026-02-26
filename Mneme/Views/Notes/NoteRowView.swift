@@ -2,13 +2,14 @@ import SwiftUI
 
 struct NoteRowView: View {
     @EnvironmentObject var state: AppState
+    @EnvironmentObject var preferences: UserPreferences
     let note: Note
 
     var body: some View {
         HStack(alignment: .center, spacing: 12) {
 
             // ── Checkbox ──
-            Button { state.toggleCompletion(note) } label: {
+            Button { state.toggleCompletion(note, preferences: preferences) } label: {
                 Image(systemName: note.isCompleted ? "checkmark.square.fill" : "square")
                     .font(.system(size: 19))
                     .foregroundColor(

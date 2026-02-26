@@ -2,30 +2,16 @@ import SwiftUI
 
 struct TabBarView: View {
     @EnvironmentObject var state: AppState
+    @EnvironmentObject var preferences: UserPreferences
 
     var body: some View {
         HStack(spacing: 0) {
-            // 0 — Notes (checkmark)
-            TabBarItem(index: 0, accentColor: .appAccent) {
-                Image(systemName: state.selectedTab == 0 ? "checkmark.square.fill" : "checkmark.square")
-                    .font(.system(size: 22, weight: .semibold))
-                    .foregroundColor(state.selectedTab == 0 ? .white : .textSecondary)
+            ForEach(Array(preferences.enabledTabs.enumerated()), id: \.element.id) { index, tab in
+                TabBarItem(index: index, accentColor: accentColor(for: tab)) {
+                    tabIcon(for: tab, isSelected: state.selectedTab == index)
+                }
+                .environmentObject(state)
             }
-            .environmentObject(state)
-
-            // 1 — Calendar (live day number)
-            TabBarItem(index: 1, accentColor: .textPrimary) {
-                CalendarTabIcon(isSelected: state.selectedTab == 1)
-            }
-            .environmentObject(state)
-
-            // 2 — Settings (gear)
-            TabBarItem(index: 2, accentColor: .textPrimary) {
-                Image(systemName: state.selectedTab == 2 ? "gearshape.fill" : "gearshape")
-                    .font(.system(size: 22, weight: .semibold))
-                    .foregroundColor(state.selectedTab == 2 ? .white : .textSecondary)
-            }
-            .environmentObject(state)
         }
         .padding(.vertical, 8)
         .padding(.horizontal, 18)
@@ -34,6 +20,48 @@ struct TabBarView: View {
         .shadow(color: .black.opacity(0.1), radius: 16, x: 0, y: 3)
         .padding(.horizontal, 46)
         .padding(.bottom, 26)
+        .onChange(of: preferences.enabledTabs) { _ in
+            // Clamp selected tab if tabs changed
+            if state.selectedTab >= preferences.enabledTabs.count {
+                state.selectedTab = 0
+            }
+        }
+    }
+
+    // MARK: - Tab Icon
+
+    @ViewBuilder
+    private func tabIcon(for tab: SettingsTabItem, isSelected: Bool) -> some View {
+        switch tab {
+        case .calendar:
+            CalendarTabIcon(isSelected: isSelected)
+        default:
+            Image(systemName: isSelected ? filledIcon(tab.icon) : tab.icon)
+                .font(.system(size: 22, weight: .semibold))
+                .foregroundColor(isSelected ? .white : .textSecondary)
+        }
+    }
+
+    private func accentColor(for tab: SettingsTabItem) -> Color {
+        switch tab {
+        case .task: .appAccent
+        case .calendar: .textPrimary
+        case .settings: .textPrimary
+        default: .appAccent
+        }
+    }
+
+    /// Return a filled variant of an SF Symbol if available.
+    private func filledIcon(_ icon: String) -> String {
+        if icon.hasSuffix(".fill") { return icon }
+        let filled = icon + ".fill"
+        // Common SF Symbols that have .fill variants
+        let fillable = [
+            "checkmark.square", "gearshape", "square.grid.2x2",
+            "clock", "star", "magnifyingglass", "calendar"
+        ]
+        if fillable.contains(icon) { return filled }
+        return icon
     }
 }
 
