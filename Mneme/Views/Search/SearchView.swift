@@ -31,7 +31,7 @@ struct SearchView: View {
                     Image(systemName: "magnifyingglass")
                         .font(.system(size: 16))
                         .foregroundColor(.textSecondary)
-                    TextField("Search", text: $searchText)
+                    TextField("Search".localized, text: $searchText)
                         .font(.system(size: 16))
                         .focused($searchFocused)
                     if !searchText.isEmpty {
@@ -76,10 +76,10 @@ struct SearchView: View {
                     Image(systemName: "binoculars.fill")
                         .font(.system(size: 56))
                         .foregroundColor(.appAccent.opacity(0.3))
-                    Text("What do you want to search")
+                    Text("What do you want to search".localized)
                         .font(.system(size: 17, weight: .semibold))
                         .foregroundColor(.textPrimary)
-                    Text("Tap the input box to search")
+                    Text("Tap the input box to search".localized)
                         .font(.system(size: 14))
                         .foregroundColor(.textSecondary)
                 }
@@ -94,7 +94,7 @@ struct SearchView: View {
                         if !matchingNotes.isEmpty {
                             WhiteCard {
                                 HStack {
-                                    Text("Tasks")
+                                    Text("Tasks".localized)
                                         .font(.system(size: 16, weight: .bold))
                                     Spacer()
                                 }
@@ -109,7 +109,7 @@ struct SearchView: View {
 
                                 if matchingNotes.count > 5 {
                                     Divider()
-                                    Text("View More")
+                                    Text("View More".localized)
                                         .font(.system(size: 14))
                                         .foregroundColor(.appAccent)
                                         .frame(maxWidth: .infinity, alignment: .center)
@@ -122,7 +122,7 @@ struct SearchView: View {
                         if !matchingFolders.isEmpty {
                             WhiteCard {
                                 HStack {
-                                    Text("List")
+                                    Text("List".localized)
                                         .font(.system(size: 16, weight: .bold))
                                     Spacer()
                                 }
@@ -157,10 +157,10 @@ struct SearchView: View {
 
                         if matchingNotes.isEmpty && matchingFolders.isEmpty {
                             VStack(spacing: 8) {
-                                Text("No results")
+                                Text("No results".localized)
                                     .font(.system(size: 16, weight: .medium))
                                     .foregroundColor(.textPrimary)
-                                Text("Try a different search term")
+                                Text("Try a different search term".localized)
                                     .font(.system(size: 14))
                                     .foregroundColor(.textSecondary)
                             }
@@ -197,9 +197,9 @@ private struct SearchResultRow: View {
     /// Date label: "Today, HH:mm - HH:mm" for events, "d MMM" for others
     private var dateLabel: String {
         if note.isCalendarEvent, let range = note.eventRange {
-            return note.date.isToday ? "Today, \(range)" : "\(note.date.shortLabel), \(range)"
+            return note.date.isToday ? "Today".localized + ", \(range)" : "\(note.date.shortLabel), \(range)"
         }
-        return note.date.isToday ? "Today" : note.date.shortLabel
+        return note.date.isToday ? "Today".localized : note.date.shortLabel
     }
 
     var body: some View {

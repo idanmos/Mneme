@@ -40,7 +40,7 @@ struct NotesListView: View {
                     Image(systemName: "magnifyingglass")
                         .font(.system(size: 16))
                         .foregroundColor(.textSecondary)
-                    Text("Search")
+                    Text("Search".localized)
                         .font(.system(size: 16))
                         .foregroundColor(.textSecondary)
                     Spacer()
@@ -74,7 +74,7 @@ struct NotesListView: View {
                     }
 
                     // View More
-                    Text("View More")
+                    Text("View More".localized)
                         .font(.system(size: 14))
                         .foregroundColor(.textSecondary)
                         .frame(maxWidth: .infinity, alignment: .center)

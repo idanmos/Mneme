@@ -84,7 +84,7 @@ extension Date {
 
     /// "Today" if today, otherwise "EEE, d MMM" — used in compact calendar header
     var compactHeaderLabel: String {
-        if Calendar.current.isDateInToday(self) { return "Today" }
+        if Calendar.current.isDateInToday(self) { return "Today".localized }
         let f = DateFormatter()
         f.dateFormat = "EEE, d MMM"
         return f.string(from: self)

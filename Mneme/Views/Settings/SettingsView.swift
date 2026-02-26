@@ -8,7 +8,7 @@ struct SettingsView: View {
             VStack(spacing: 16) {
 
                 // ── Title ──
-                Text("Settings")
+                Text("Settings".localized)
                     .font(.mnemeNavTitle)
                     .frame(maxWidth: .infinity, alignment: .center)
                     .padding(.top, 60)
@@ -19,32 +19,32 @@ struct SettingsView: View {
 
                 // ── Tab bar ──
                 SettingsCard(items: [
-                    SettingsItem(icon: "rectangle.grid.2x2.fill",  label: "Tab Bar",      iconBg: Color(hex: "635BFF")),
+                    SettingsItem(icon: "rectangle.grid.2x2.fill",  label: "Tab Bar".localized,      iconBg: Color(hex: "635BFF")),
                 ])
 
                 // ── Preferences ──
                 SettingsCard(items: [
-                    SettingsItem(icon: "paintbrush.fill",       label: "Appearance",             iconBg: Color(hex: "007AFF")),
-                    SettingsItem(icon: "music.note",            label: "Sounds & Notifications", iconBg: Color(hex: "34C759")),
-                    SettingsItem(icon: "clock.fill",            label: "Date & Time",            iconBg: Color(hex: "FF9F0A")),
-                    SettingsItem(icon: "rectangle.3.group.fill",label: "Widgets",                iconBg: Color(hex: "5856D6")),
-                    SettingsItem(icon: "list.bullet.indent",    label: "General",                iconBg: Color(hex: "636366")),
+                    SettingsItem(icon: "paintbrush.fill",       label: "Appearance".localized,             iconBg: Color(hex: "007AFF")),
+                    SettingsItem(icon: "music.note",            label: "Sounds & Notifications".localized, iconBg: Color(hex: "34C759")),
+                    SettingsItem(icon: "clock.fill",            label: "Date & Time".localized,            iconBg: Color(hex: "FF9F0A")),
+                    SettingsItem(icon: "rectangle.3.group.fill",label: "Widgets".localized,                iconBg: Color(hex: "5856D6")),
+                    SettingsItem(icon: "list.bullet.indent",    label: "General".localized,                iconBg: Color(hex: "636366")),
                 ])
 
                 // ── Integrations ──
                 SettingsCard(items: [
-                    SettingsItem(icon: "arrow.right.circle.fill", label: "Import & Integration", iconBg: Color(hex: "30B0C7"), trailingType: .integrationIcons),
+                    SettingsItem(icon: "arrow.right.circle.fill", label: "Import & Integration".localized, iconBg: Color(hex: "30B0C7"), trailingType: .integrationIcons),
                 ])
 
                 // ── Help ──
                 SettingsCard(items: [
-                    SettingsItem(icon: "star.circle.fill",   label: "Help & Feedback", iconBg: Color(hex: "FF9500")),
-                    SettingsItem(icon: "person.2.fill",      label: "Follow Us",       iconBg: Color(hex: "007AFF"), trailingType: .socialIcons),
-                    SettingsItem(icon: "info.circle.fill",   label: "About",           iconBg: Color(hex: "8E8E93"), trailingType: .text("v8.0.20")),
+                    SettingsItem(icon: "star.circle.fill",   label: "Help & Feedback".localized, iconBg: Color(hex: "FF9500")),
+                    SettingsItem(icon: "person.2.fill",      label: "Follow Us".localized,       iconBg: Color(hex: "007AFF"), trailingType: .socialIcons),
+                    SettingsItem(icon: "info.circle.fill",   label: "About".localized,           iconBg: Color(hex: "8E8E93"), trailingType: .text("v8.0.20")),
                 ])
 
                 // ── Sign out ──
-                Button("Sign Out") {}
+                Button("Sign Out".localized) {}
                     .font(.system(size: 16, weight: .medium))
                     .foregroundColor(.red)
                     .frame(maxWidth: .infinity)

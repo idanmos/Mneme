@@ -6,8 +6,13 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		8AB3F2682F50943900DBC455 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 8AB3F2672F50943900DBC455 /* Localizable.xcstrings */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		8AB3F2142F50701E00DBC455 /* Mneme.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mneme.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8AB3F2672F50943900DBC455 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -34,6 +39,7 @@
 			children = (
 				8AB3F2162F50701E00DBC455 /* Mneme */,
 				8AB3F2152F50701E00DBC455 /* Products */,
+				8AB3F2672F50943900DBC455 /* Localizable.xcstrings */,
 			);
 			sourceTree = "<group>";
 		};
@@ -91,6 +97,15 @@
 			knownRegions = (
 				en,
 				Base,
+				de,
+				es,
+				fr,
+				he,
+				ja,
+				"pt-BR",
+				"zh-Hans",
+				en,
+				Base,
 			);
 			mainGroup = 8AB3F20B2F50701E00DBC455;
 			minimizedProjectReferenceProxies = 1;
@@ -109,6 +124,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8AB3F2682F50943900DBC455 /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

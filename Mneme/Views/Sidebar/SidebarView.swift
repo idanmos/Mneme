@@ -75,7 +75,7 @@ struct SidebarView: View {
                 HStack {
                     HStack(spacing: 8) {
                         Image(systemName: "plus.square")
-                        Text("Add")
+                        Text("Add".localized)
                     }
                     .font(.system(size: 15))
                     .foregroundColor(.white.opacity(0.4))

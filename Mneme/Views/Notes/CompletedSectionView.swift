@@ -13,7 +13,7 @@ struct CompletedSectionView: View {
                 }
             } label: {
                 HStack {
-                    Text("Completed")
+                    Text("Completed".localized)
                         .font(.system(size: 14))
                         .foregroundColor(.textSecondary)
 

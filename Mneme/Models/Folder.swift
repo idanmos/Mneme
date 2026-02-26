@@ -14,7 +14,7 @@ struct Folder: Identifiable, Equatable {
 
     static var today = Folder(
         id: UUID(uuidString: "00000000-0000-0000-0000-000000000001")!,
-        name: "Today",
+        name: "Today".localized,
         sfSymbol: "calendar",
         iconColor: .white,
         count: 7,
@@ -23,14 +23,14 @@ struct Folder: Identifiable, Equatable {
 
     static var inbox = Folder(
         id: UUID(uuidString: "00000000-0000-0000-0000-000000000002")!,
-        name: "Inbox",
+        name: "Inbox".localized,
         sfSymbol: "archivebox.fill",
         iconColor: .white
     )
 
     static var subscribedCalendars = Folder(
         id: UUID(uuidString: "00000000-0000-0000-0000-000000000003")!,
-        name: "Subscribed Calendars",
+        name: "Subscribed Calendars".localized,
         sfSymbol: "dot.radiowaves.right",
         iconColor: .orange,
         count: 115,
@@ -39,7 +39,7 @@ struct Folder: Identifiable, Equatable {
 
     static var car = Folder(
         id: UUID(uuidString: "00000000-0000-0000-0000-000000000004")!,
-        name: "Car",
+        name: "Car".localized,
         sfSymbol: "car.fill",
         iconColor: Color(hex: "FF3B30"),
         count: 2
@@ -54,7 +54,7 @@ struct Folder: Identifiable, Equatable {
 
     static var work = Folder(
         id: UUID(uuidString: "00000000-0000-0000-0000-000000000006")!,
-        name: "Work",
+        name: "Work".localized,
         sfSymbol: "briefcase.fill",
         iconColor: .white,
         count: 8
@@ -62,7 +62,7 @@ struct Folder: Identifiable, Equatable {
 
     static var personal = Folder(
         id: UUID(uuidString: "00000000-0000-0000-0000-000000000007")!,
-        name: "Personal",
+        name: "Personal".localized,
         sfSymbol: "house.fill",
         iconColor: .white,
         count: 7

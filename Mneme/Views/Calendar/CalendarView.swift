@@ -1,12 +1,5 @@
 import SwiftUI
 
-private struct MonthGridBottomKey: PreferenceKey {
-    static var defaultValue: CGFloat = 1000
-    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
-        value = nextValue()
-    }
-}
-
 struct CalendarView: View {
     @EnvironmentObject var state: AppState
 
@@ -24,19 +17,8 @@ struct CalendarView: View {
 
                     Spacer()
 
-                    // Dual-line header when compact
-                    VStack(spacing: 1) {
-                        if state.calendarCompact {
-                            Text(state.displayedMonth.monthName)
-                                .font(.system(size: 13))
-                                .foregroundColor(.textSecondary)
-                        }
-                        Text(state.calendarCompact
-                             ? state.calendarDate.compactHeaderLabel
-                             : state.displayedMonth.monthName)
-                            .font(.mnemeNavTitle)
-                    }
-                    .animation(.easeInOut(duration: 0.2), value: state.calendarCompact)
+                    Text(state.displayedMonth.monthName)
+                        .font(.mnemeNavTitle)
 
                     Spacer()
 
@@ -67,83 +49,51 @@ struct CalendarView: View {
                 .padding(.top, 56)
                 .padding(.bottom, 6)
 
-                // ── Scrollable content area ──
-                ZStack(alignment: .top) {
+                // ── Fixed calendar at top ──
+                VStack(spacing: 0) {
+                    MonthGridView()
+                        .environmentObject(state)
+                        .padding(.horizontal, 12)
+                        .padding(.bottom, 4)
+                    
+                    Divider()
+                }
+                .background(Color.appBackground)
 
-                    // Single scroll view with everything
-                    ScrollView(showsIndicators: false) {
-                        VStack(spacing: 0) {
+                // ── Scrollable task list ──
+                ScrollView(showsIndicators: false) {
+                    VStack(spacing: 0) {
+                        // Day header
+                        Text(dayHeader)
+                            .font(.system(size: 13, weight: .bold))
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(.horizontal, 18)
+                            .padding(.vertical, 12)
 
-                            // Month grid (scrolls with content)
-                            MonthGridView()
-                                .environmentObject(state)
-                                .padding(.horizontal, 12)
-                                .padding(.bottom, 4)
-                                .background(
-                                    GeometryReader { geo in
-                                        Color.clear.preference(
-                                            key: MonthGridBottomKey.self,
-                                            value: geo.frame(in: .named("calScroll")).maxY
-                                        )
-                                    }
-                                )
+                        // Task list
+                        let items = state.notes(for: state.calendarDate)
 
-                            Divider()
-
-                            // Day header
-                            Text(dayHeader)
-                                .font(.system(size: 13, weight: .bold))
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .padding(.horizontal, 18)
-                                .padding(.vertical, 12)
-
-                            // Task list
-                            let items = state.notes(for: state.calendarDate)
-
-                            if items.isEmpty {
-                                Text("No tasks for this day")
-                                    .font(.system(size: 14))
-                                    .foregroundColor(.textSecondary)
-                                    .frame(maxWidth: .infinity, alignment: .center)
-                                    .padding(.top, 32)
-                            } else {
-                                VStack(spacing: 0) {
-                                    ForEach(items) { note in
-                                        CalendarTaskRowView(note: note)
-                                        if note.id != items.last?.id {
-                                            Divider().padding(.leading, 72)
-                                        }
+                        if items.isEmpty {
+                            Text("No tasks for this day".localized)
+                                .font(.system(size: 14))
+                                .foregroundColor(.textSecondary)
+                                .frame(maxWidth: .infinity, alignment: .center)
+                                .padding(.top, 32)
+                        } else {
+                            VStack(spacing: 0) {
+                                ForEach(items) { note in
+                                    CalendarTaskRowView(note: note)
+                                    if note.id != items.last?.id {
+                                        Divider().padding(.leading, 72)
                                     }
                                 }
-                                .background(Color.cardBackground)
-                                .cornerRadius(Radius.card)
-                                .padding(.horizontal, 14)
                             }
+                            .background(Color.cardBackground)
+                            .cornerRadius(Radius.card)
+                            .padding(.horizontal, 14)
+                        }
 
-                            Spacer().frame(height: 600)
-                        }
-                    }
-                    .coordinateSpace(name: "calScroll")
-                    .onPreferenceChange(MonthGridBottomKey.self) { maxY in
-                        let shouldBeCompact = maxY < 20
-                        if shouldBeCompact != state.calendarCompact {
-                            withAnimation(.easeInOut(duration: 0.2)) {
-                                state.calendarCompact = shouldBeCompact
-                            }
-                        }
-                    }
-
-                    // ── Pinned compact week strip (overlays when month grid scrolled off) ──
-                    if state.calendarCompact {
-                        VStack(spacing: 0) {
-                            WeekStripView()
-                                .environmentObject(state)
-                                .padding(.horizontal, 12)
-                                .padding(.bottom, 4)
-                            Divider()
-                        }
-                        .background(Color.appBackground)
-                        .transition(.opacity)
+                        Spacer().frame(height: 100)
                     }
                 }
             }
@@ -183,6 +133,6 @@ struct CalendarView: View {
     }
 
     private var dayHeader: String {
-        state.calendarDate.isToday ? "TODAY" : state.calendarDate.dayHeaderLabel
+        state.calendarDate.isToday ? "Today".localized.uppercased() : state.calendarDate.dayHeaderLabel
     }
 }

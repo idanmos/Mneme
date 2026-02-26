@@ -7,7 +7,7 @@ struct AddNoteSheet: View {
     @FocusState private var titleFocused: Bool
 
     private var placeholder: String {
-        state.selectedTab == 1 ? "What would you like to do?" : "Prepare monthly report"
+        state.selectedTab == 1 ? "What would you like to do?".localized : "Prepare monthly report".localized
     }
 
     var body: some View {
@@ -29,7 +29,7 @@ struct AddNoteSheet: View {
             TextField(
                 "",
                 text: $bodyText,
-                prompt: Text("Description").foregroundColor(.textSecondary)
+                prompt: Text("Description".localized).foregroundColor(.textSecondary)
             )
             .font(.system(size: 14))
             .foregroundColor(.textPrimary)
@@ -54,7 +54,7 @@ struct AddNoteSheet: View {
                         Image(systemName: "calendar")
                             .font(.system(size: 17))
                             .foregroundColor(.appAccent)
-                        Text("Today")
+                        Text("Today".localized)
                             .font(.system(size: 13, weight: .medium))
                             .foregroundColor(.appAccent)
                     }
